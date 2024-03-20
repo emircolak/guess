@@ -1,118 +1,153 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  Image,
+  Dimensions,
+} from "react-native";
+import { useFonts } from "expo-font";
+import OnboardingModal from "react-native-onboarding-modal";
+import { useState } from "react";
 
-const DifficultyLevel = ({navigation}) => {
+const { width, height } = Dimensions.get("window");
 
-    let [fontsLoaded] = useFonts({
-        UbuntuMedium: require('../assets/fonts/Ubuntu-Medium.ttf'),
-      });
-    
-      if (!fontsLoaded) {
-        return <AppLoading />;
-      }
+const DifficultyLevel = ({ navigation }) => {
+  let [fontsLoaded] = useFonts({
+    UbuntuMedium: require("../assets/fonts/Ubuntu-Medium.ttf"),
+  });
 
-        const normalMode = () => {
-            navigation.navigate('Game', {mode: 'normal'});
-        };
-        const difficultMode = () => {
-            navigation.navigate('Game', {mode: 'difficult'});
-        };
+  const normalMode = () => {
+    navigation.navigate("Game", { mode: "normal" });
+  };
+  const difficultMode = () => {
+    navigation.navigate("Game", { mode: "difficult" });
+  };
+
+  const handleBack = () => {
+    navigation.navigate("Mode");
+  };
 
   return (
     <>
-        <ImageBackground source={require('../assets/images/background.png')} style={styles.background}>
-            <Image source={require('../assets/images/backgroundNumbers.png')} style={styles.overlayImage} />
-            <View style={styles.container}>
-            <View style={styles.buttonsContainer}>
-                <Image source={require('../assets/images/icon.png')} style={styles.logo} />
-                <TouchableOpacity onPress={normalMode}  style={styles.button1}>
-                <Text style={[styles.buttonText1, {fontFamily: 'UbuntuMedium'}]}>Normal</Text>
+      <ImageBackground
+        source={require("../assets/images/blurry_background1.png")}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          <View>
+            <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: height * 0.05,
+                  marginLeft: width * 0.05,
+                }}
+              >
+                <TouchableOpacity onPress={() => handleBack()}>
+                  <Image
+                    source={require("../assets/images/back.png")}
+                    style={styles.back}
+                  />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={difficultMode} style={styles.button}>
-                <Text style={[styles.buttonText, {fontFamily: 'UbuntuMedium'}]}>Zor</Text>
-                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  marginTop: height * 0.1,
+                  marginRight: width * 0.05,
+                }}
+              >
+                <Image
+                  source={require("../assets/images/icon.png")}
+                  style={styles.logo}
+                />
+              </View>
+              <View style={{ flex: 1 }}></View>
             </View>
-            <View style={styles.robotContainer}>
-                <Image source={require('../assets/images/robot.png')} style={styles.robot} />
-            </View>
-            </View>
-        </ImageBackground>
+          </View>
+
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity onPress={normalMode} style={styles.button1}>
+              <Text
+                style={[styles.buttonText1, { fontFamily: "UbuntuMedium" }]}
+              >
+                Normal
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={difficultMode} style={styles.button}>
+              <Text style={[styles.buttonText, { fontFamily: "UbuntuMedium" }]}>
+                Zor
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
     </>
   );
-}
+};
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   background: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
+    position: "absolute",
+    width: "100%",
+    height: "100%",
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    width: "100%",
+    height: "100%",
   },
   buttonsContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingTop: height * 0.1,
   },
-  robotContainer: {
-    width: '100%',
-    alignItems: 'center',
-    marginTop: 20,
+  back: {
+    width: width * 0.1,
+    height: width * 0.1,
+    position: "fixed",
+    resizeMode: "contain",
+    top: 0,
+    left: 0,
   },
   logo: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-    position: 'relative',
-    bottom: 50,
+    width: width * 0.25,
+    height: width * 0.25,
+    resizeMode: "contain",
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#FE840A',
-    padding: 15,
+    backgroundColor: "white",
+    paddingVertical: 15,
+    paddingHorizontal: width * 0.05,
     borderRadius: 30,
     marginVertical: 5,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   button1: {
-    backgroundColor: 'white',
-    padding: 15,
+    backgroundColor: "#FFFF02",
+    paddingVertical: 15,
+    paddingHorizontal: width * 0.05,
     borderRadius: 30,
-    marginVertical: 5, 
-    width: '80%',
-    alignItems: 'center',
+    marginVertical: 5,
+    width: "80%",
+    alignItems: "center",
   },
   buttonText: {
-    color: 'white', 
-    fontSize: 20, 
+    color: "black",
+    fontSize: width * 0.05,
   },
   buttonText1: {
-    color: 'black', 
-    fontSize: 20,
+    color: "black",
+    fontSize: width * 0.05,
+    fontFamily: "UbuntuMedium",
   },
-  robot: {
-    width: '60%',
-    height: 300,
-    resizeMode: 'contain',
-    position: 'relative',
-    bottom: -100,
-    left: 200,
-    transform: [{ rotateZ: '-35deg' }], 
-  },
-  overlayImage: {
-    position: 'absolute',
-    width: '100%', 
-    height: '50%', 
-    resizeMode: 'cover', 
-    top: 0, 
-  }
 });
-
 
 export default DifficultyLevel;
